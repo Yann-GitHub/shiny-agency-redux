@@ -92,15 +92,6 @@ const Availability = styled.span`
 function Profile() {
   const theme = useSelector(selectTheme)
   const { id: freelanceId } = useParams()
-
-  // useEffect(() => {
-  //   fetch(`http://localhost:8000/freelance?id=${queryId}`)
-  //     .then((response) => response.json())
-  //     .then((jsonResponse) => {
-  //       setProfileData(jsonResponse?.freelanceData)
-  //     })
-  // }, [freelanceId])
-
   const store = useStore()
   useEffect(() => {
     fetchOrUpdateFreelance(store, freelanceId)

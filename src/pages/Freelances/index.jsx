@@ -42,33 +42,25 @@ const LoaderWrapper = styled.div`
 `
 
 function Freelances() {
-  // const { theme } = useTheme()
-  const theme = useSelector(selectTheme)
-
-  // const { data, isLoading, error } = useFetch(
-  //   `http://localhost:8000/freelances`
-  // )
-  const freelances = useSelector(selectFreelances)
-
-  // const freelancersList = data?.freelancersList
-  const freelancersList = freelances.data?.freelancersList
-
+  // on récupère le store grâce au hook useStore()
   const store = useStore()
 
+  // on utilise useEffect pour lancer la requête au chargement du composant
   useEffect(() => {
+    // on exécute notre action asynchrone avec le store en paramètre
     fetchOrUpdateFreelances(store)
+    // On suit la recommandation d'ESLint de passer le store
+    // en dépendances car il est utilisé dans l'effet
+    // cela n'as pas d'impacte sur le fonctionnement car le store ne change jamais
   }, [store])
 
-  // if (error) {
-  //   return <span>Il y a un problème</span>
-  // }
+  const theme = useSelector(selectTheme)
+
+  const freelances = useSelector(selectFreelances)
 
   if (freelances.status === 'rejected') {
     return <span>Il y a un problème</span>
   }
-
-  const isLoading =
-    freelances.status === 'void' || freelances.status === 'pending'
 
   return (
     <div>
@@ -76,13 +68,13 @@ function Freelances() {
       <PageSubtitle theme={theme}>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </PageSubtitle>
-      {isLoading ? (
+      {freelances.status === 'pending' || freelances.status === 'void' ? (
         <LoaderWrapper>
           <Loader theme={theme} data-testid="loader" />
         </LoaderWrapper>
       ) : (
         <CardsContainer>
-          {freelancersList?.map((profile) => (
+          {freelances.data.freelancersList.map((profile) => (
             <Link key={`freelance-${profile.id}`} to={`/profile/${profile.id}`}>
               <Card
                 label={profile.job}
