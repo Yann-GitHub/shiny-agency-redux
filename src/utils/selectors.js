@@ -10,6 +10,8 @@ export const selectFreelance = (freelanceId) => (state) => {
   return state.freelance[freelanceId] ?? voidFreelance
 }
 
+export const selectResults = (state) => state.results
+
 // state.freelance[freelanceId] ?? voidFreelance
 // The nullish coalescing (??) operator is a logical operator that returns
 // its right-hand side operand when its left-hand side operand

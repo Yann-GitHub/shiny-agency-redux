@@ -6,7 +6,7 @@ import colors from '../../utils/style/colors'
 import { Loader } from '../../utils/style/Atoms'
 import { SurveyContext } from '../../utils/context'
 // import { useFetch } from '../../utils/hooks'
-import { useSelector, useStore } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectTheme } from '../../utils/selectors'
 import { selectSurvey } from '../../utils/selectors'
 import { fetchOrUpdateSurvey } from '../../features/survey'
@@ -82,11 +82,13 @@ function Survey() {
   // const { data, isLoading, error } = useFetch(`http://localhost:8000/survey`)
 
   const survey = useSelector(selectSurvey)
-  const store = useStore()
+  // const store = useStore()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    fetchOrUpdateSurvey(store)
-  }, [store])
+    // fetchOrUpdateSurvey(store)
+    dispatch(fetchOrUpdateSurvey)
+  }, [dispatch])
 
   const surveyData = survey.data?.surveyData
 

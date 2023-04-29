@@ -5,8 +5,8 @@ import colors from '../../utils/style/colors'
 import { Loader } from '../../utils/style/Atoms'
 // import { useFetch } from '../../utils/hooks'
 // import { useTheme } from '../../utils/hooks'
-import { useSelector } from 'react-redux'
-import { useStore } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+// import { useStore } from 'react-redux'
 import { selectFreelances, selectTheme } from '../../utils/selectors'
 import { fetchOrUpdateFreelances } from '../../features/freelances'
 import { useEffect } from 'react'
@@ -43,16 +43,18 @@ const LoaderWrapper = styled.div`
 
 function Freelances() {
   // on récupère le store grâce au hook useStore()
-  const store = useStore()
-
+  // const store = useStore()
+  const dispatch = useDispatch()
   // on utilise useEffect pour lancer la requête au chargement du composant
   useEffect(() => {
     // on exécute notre action asynchrone avec le store en paramètre
-    fetchOrUpdateFreelances(store)
+    // fetchOrUpdateFreelances(store)
+
+    dispatch(fetchOrUpdateFreelances)
     // On suit la recommandation d'ESLint de passer le store
     // en dépendances car il est utilisé dans l'effet
     // cela n'as pas d'impacte sur le fonctionnement car le store ne change jamais
-  }, [store])
+  }, [dispatch])
 
   const theme = useSelector(selectTheme)
 
