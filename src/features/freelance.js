@@ -27,7 +27,9 @@ const initialState = {
 // )
 
 export function fetchOrUpdateFreelance(freelanceId) {
+  // on retourne un thunk
   return async (dispatch, getState) => {
+    // ...
     const selectFreelanceById = selectFreelance(freelanceId)
     const status = selectFreelanceById(getState()).status
     if (status === 'pending' || status === 'updating') {
