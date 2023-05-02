@@ -5,11 +5,14 @@ import colors from '../../utils/style/colors'
 import { Loader } from '../../utils/style/Atoms'
 // import { useFetch } from '../../utils/hooks'
 // import { useTheme } from '../../utils/hooks'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 // import { useStore } from 'react-redux'
-import { selectFreelances, selectTheme } from '../../utils/selectors'
-import { fetchOrUpdateFreelances } from '../../features/freelances'
-import { useEffect } from 'react'
+// import { selectFreelances, selectTheme } from '../../utils/selectors'
+import { selectTheme } from '../../utils/selectors'
+// import { fetchOrUpdateFreelances } from '../../features/freelances'
+// import { useEffect } from 'react'
+import { useQuery } from 'react-query'
 
 const CardsContainer = styled.div`
   display: grid;
@@ -42,25 +45,15 @@ const LoaderWrapper = styled.div`
 `
 
 function Freelances() {
-  // on récupère le store grâce au hook useStore()
-  // const store = useStore()
-  const dispatch = useDispatch()
-  // on utilise useEffect pour lancer la requête au chargement du composant
-  useEffect(() => {
-    // on exécute notre action asynchrone avec le store en paramètre
-    // fetchOrUpdateFreelances(store)
-
-    dispatch(fetchOrUpdateFreelances)
-    // On suit la recommandation d'ESLint de passer le store
-    // en dépendances car il est utilisé dans l'effet
-    // cela n'as pas d'impacte sur le fonctionnement car le store ne change jamais
-  }, [dispatch])
-
   const theme = useSelector(selectTheme)
 
-  const freelances = useSelector(selectFreelances)
+  const { data, isLoading, error } = useQuery('freelances', async () => {
+    const response = await fetch('http://localhost:8000/freelances')
+    const data = await response.json()
+    return data
+  })
 
-  if (freelances.status === 'rejected') {
+  if (error) {
     return <span>Il y a un problème</span>
   }
 
@@ -70,13 +63,13 @@ function Freelances() {
       <PageSubtitle theme={theme}>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </PageSubtitle>
-      {freelances.status === 'pending' || freelances.status === 'void' ? (
+      {isLoading ? (
         <LoaderWrapper>
           <Loader theme={theme} data-testid="loader" />
         </LoaderWrapper>
       ) : (
         <CardsContainer>
-          {freelances.data.freelancersList.map((profile) => (
+          {data.freelancersList.map((profile) => (
             <Link key={`freelance-${profile.id}`} to={`/profile/${profile.id}`}>
               <Card
                 label={profile.job}
