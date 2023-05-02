@@ -1,4 +1,3 @@
-// import { createAction, createReducer } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { selectFreelances } from '../utils/selectors'
 
@@ -12,29 +11,19 @@ const initialState = {
   error: null,
 }
 
-// const freelancesFetching = createAction('freelances/fetching')
-// const freelancesResolved = createAction('freelances/resolved')
-// const freelancesRejected = createAction('freelances/rejected')
-
-// Ici la fonction asynchrone initiale a été converti en thunk
 export async function fetchOrUpdateFreelances(dispatch, getState) {
-  // on peut lire le state actuel avec getState()
   const status = selectFreelances(getState()).status
   if (status === 'pending' || status === 'updating') {
     // on stop la fonction pour éviter de récupérer plusieurs fois la même donnée
     return
   }
-  // On peut modifier le state en envoyant des actions avec dispatch()
-  // ici on indique que la requête est en cours
   dispatch(actions.fetching())
   try {
     // on utilise fetch pour faire la requête
     const response = await fetch('http://localhost:8000/freelances')
     const data = await response.json()
-    // si la requête fonctionne, on envoie les données à redux avec l'action resolved
     dispatch(actions.resolved(data))
   } catch (error) {
-    // en cas d'erreur on infirme le store avec l'action rejected
     dispatch(actions.rejected(error))
   }
 }
@@ -43,8 +32,8 @@ const { actions, reducer } = createSlice({
   name: 'freelances',
   initialState,
   reducers: {
+    // fetching action & reducer
     fetching: (draft) => {
-      // si le statut est void
       if (draft.status === 'void') {
         // on passe en pending
         draft.status = 'pending'
@@ -66,6 +55,7 @@ const { actions, reducer } = createSlice({
       // sinon l'action est ignorée
       return
     },
+    // resolved action & reducer
     resolved: (draft, action) => {
       // si la requête est en cours
       if (draft.status === 'pending' || draft.status === 'updating') {
@@ -77,6 +67,7 @@ const { actions, reducer } = createSlice({
       // sinon l'action est ignorée
       return
     },
+    // rejected action & reducer
     rejected: (draft, action) => {
       // si la requête est en cours
       if (draft.status === 'pending' || draft.status === 'updating') {
@@ -91,6 +82,8 @@ const { actions, reducer } = createSlice({
     },
   },
 })
+
+export const { fetching, rejected, resolved } = actions
 
 export default reducer
 

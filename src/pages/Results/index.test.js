@@ -48,17 +48,17 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-// describe('The Results component', () => {
-//   it('should display the results after the data is loaded', async () => {
-//     render(<Results />)
-//     await waitForElementToBeRemoved(() => screen.getByTestId('loader'))
-//     const jobTitleElements = screen.getAllByTestId('job-title')
-//     expect(jobTitleElements[0].textContent).toBe('seo')
-//     expect(jobTitleElements.length).toBe(2)
-//     const jobDescriptionElements = screen.getAllByTestId('job-description')
-//     expect(jobDescriptionElements[1].textContent).toBe(
-//       resultsMockedData[1].description
-//     )
-//     expect(jobDescriptionElements.length).toBe(2)
-//   })
-// })
+describe('The Results component', () => {
+  it('should display the results after the data is loaded', async () => {
+    render(<Results />)
+    await waitForElementToBeRemoved(() => screen.getByTestId('loader'))
+    const jobTitleElements = screen.getAllByTestId('job-title')
+    expect(jobTitleElements[0].textContent).toBe('seo')
+    expect(jobTitleElements.length).toBe(2)
+    const jobDescriptionElements = screen.getAllByTestId('job-description')
+    expect(jobDescriptionElements[1].textContent).toBe(
+      resultsMockedData[1].description
+    )
+    expect(jobDescriptionElements.length).toBe(2)
+  })
+})

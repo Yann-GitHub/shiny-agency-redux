@@ -1,5 +1,6 @@
 import Card from './'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '../../utils/test'
 
 describe('Card', () => {
   it('Should render title and image', async () => {

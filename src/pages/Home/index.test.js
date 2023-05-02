@@ -1,9 +1,10 @@
 import { MemoryRouter } from 'react-router-dom'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { render } from '../../utils/test'
 import Home from './'
 
 describe('The Home component', () => {
-  it.skip('should render title', () => {
+  it('should render title', () => {
     render(
       <MemoryRouter>
         <Home />
