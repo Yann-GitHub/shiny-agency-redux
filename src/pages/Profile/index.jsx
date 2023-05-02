@@ -1,10 +1,13 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import colors from '../../utils/style/colors'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectFreelance, selectTheme } from '../../utils/selectors'
-import { fetchOrUpdateFreelance } from '../../features/freelance'
+// import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+// import { selectFreelance, selectTheme } from '../../utils/selectors'
+import { selectTheme } from '../../utils/selectors'
+// import { fetchOrUpdateFreelance } from '../../features/freelance'
+import { useQuery } from 'react-query'
 
 const ProfileWrapper = styled.div`
   display: flex;
@@ -93,16 +96,29 @@ function Profile() {
   const theme = useSelector(selectTheme)
   const { id: freelanceId } = useParams()
   // const store = useStore()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
-  useEffect(() => {
-    // fetchOrUpdateFreelance(store, freelanceId)
-    dispatch(fetchOrUpdateFreelance(freelanceId))
-  }, [dispatch, freelanceId])
+  // useEffect(() => {
+  //   // fetchOrUpdateFreelance(store, freelanceId)
+  //   dispatch(fetchOrUpdateFreelance(freelanceId))
+  // }, [dispatch, freelanceId])
 
-  const freelance = useSelector(selectFreelance(freelanceId))
+  // const freelance = useSelector(selectFreelance(freelanceId))
 
-  const profileData = freelance.data?.freelanceData ?? {}
+  const { data } = useQuery(
+    // on utilise un tableau pour identifier la requête
+    // on inclut l'Id du freelance dans ce tableau
+    ['freelance', freelanceId],
+    async () => {
+      const response = await fetch(
+        `http://localhost:8000/freelance?id=${freelanceId}`
+      )
+      const data = await response.json()
+      return data
+    }
+  )
+
+  const profileData = data?.freelanceData ?? {}
 
   const { picture, name, location, tjm, job, skills, available, id } =
     profileData
